@@ -29,19 +29,18 @@ const invoice = ref<Invoice>({
 
 const modalStore = useModalStore()
 
-const dateOptions = {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-}
-
 onMounted(() => {
   invoice.value.invoiceDate = new Date(
     invoice.value.invoiceDateUnix
-  ).toLocaleString('pt-BR', dateOptions as any)
+  ).toLocaleString('pt-BR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
 })
 
 watch(
+  // watch a ref
   () => {
     return invoice.value.paymentTerms
   },
@@ -52,7 +51,11 @@ watch(
 
     invoice.value.paymentDueDate = new Date(
       invoice.value.paymentDueDateUnix
-    ).toLocaleString('pt-BR', dateOptions as any)
+    ).toLocaleString('pt-BR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
   }
 )
 
@@ -432,7 +435,7 @@ table {
   align-self: center;
 }
 
-.table-items{
+.table-items {
   margin-block: var(--extra-small-size-fluid);
 }
 
@@ -440,7 +443,7 @@ table {
   text-align: right;
 }
 
-.table-items input{
+.table-items input {
   padding-block: var(--extra-small-size-fluid);
 }
 
