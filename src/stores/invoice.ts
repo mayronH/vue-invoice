@@ -7,6 +7,7 @@ export const useInvoiceStore = defineStore('invoice', {
   state: () => ({
     invoiceData: [] as Array<Invoice>,
     invoicesLoaded: false,
+    currentInvoiceArray: [] as Array<Invoice>,
   }),
   getters: {
     getInvoices: async (state) => {
@@ -49,6 +50,13 @@ export const useInvoiceStore = defineStore('invoice', {
       })
 
       state.invoicesLoaded = true
+    },
+  },
+  actions: {
+    getCurrentInvoice(id: string | string[]) {
+      this.currentInvoiceArray = this.invoiceData.filter((invoice: Invoice) => {
+        return invoice.invoiceId === id
+      })
     },
   },
 })

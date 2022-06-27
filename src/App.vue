@@ -27,7 +27,6 @@ onBeforeMount(() => {
 
   invoiceStore.getInvoices
 })
-
 </script>
 
 <template>
@@ -118,5 +117,49 @@ main.content {
 
   font-size: 1.125rem;
   font-weight: 600;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: var(--extra-small-size-fluid) var(--small-size-fluid);
+
+  border-radius: var(--border-radius);
+}
+
+.status-badge span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  font-weight: 600;
+}
+
+.status-badge span::before {
+  content: '';
+
+  border: 10px solid var(--white);
+  border-radius: 100vw;
+}
+
+.paid {
+  background-color: var(--accent);
+
+  color: var(--bg-dark);
+}
+
+.paid span::before {
+  border-color: var(--bg-dark);
+}
+
+.draft {
+  background-color: var(--accent4);
+}
+
+.pending {
+  background-color: var(--accent3);
 }
 </style>

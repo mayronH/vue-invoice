@@ -26,7 +26,7 @@ const props = defineProps({
         <span class="price">${{ props.invoice.invoiceTotal }}</span>
 
         <div
-          class="status-button"
+          class="status-badge"
           :class="{
             paid: props.invoice.invoicePaid,
             draft: props.invoice.invoiceDraft,
@@ -68,11 +68,11 @@ const props = defineProps({
   justify-content: space-around;
 }
 
-.invoice-details{
+.invoice-details {
   flex-basis: 60%;
 }
 
-.invoice-status{
+.invoice-status {
   flex-basis: 40%;
 }
 
@@ -87,43 +87,5 @@ const props = defineProps({
 .price {
   font-size: 1.125rem;
   font-weight: 600;
-}
-
-.status-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: var(--extra-small-size-fluid) var(--small-size-fluid);
-
-  border-radius: var(--border-radius);
-}
-
-.status-button span {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-
-  font-weight: 600;
-}
-
-.status-button span::before {
-  content: '';
-
-  border: 10px solid var(--white);
-  border-radius: 100vw;
-}
-
-.paid {
-  background-color: var(--accent);
-}
-
-.draft {
-  background-color: var(--accent4);
-}
-
-.pending {
-  background-color: var(--accent3);
 }
 </style>
