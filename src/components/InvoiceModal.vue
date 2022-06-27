@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useModalStore } from '../stores/modal'
 import { Invoice } from '../types'
 const invoice = ref<Invoice>({
@@ -13,11 +13,11 @@ const invoice = ref<Invoice>({
   clientCity: '',
   clientZipCode: '',
   clientCountry: '',
-  invoiceDateUnix: '',
-  invoiceDate: new Date(),
+  invoiceDateUnix: new Date(),
+  invoiceDate: '',
   paymentTerms: '',
-  paymentDueDateUnix: '',
-  paymentDueDate: new Date(),
+  paymentDueDateUnix: new Date(),
+  paymentDueDate: '',
   productDescription: '',
   invoicePending: '',
   invoiceDraft: false,
@@ -27,8 +27,37 @@ const invoice = ref<Invoice>({
 
 const modalStore = useModalStore()
 
-function checkClick() {
-  console.log('wah')
+const dateOptions = {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+}
+
+onMounted(() => {
+  invoice.value.invoiceDate = new Date(
+    invoice.value.invoiceDateUnix
+  ).toLocaleString('pt-BR', dateOptions as any)
+})
+
+watch(
+  () => {
+    return invoice.value.paymentTerms
+  },
+  () => {
+    invoice.value.paymentDueDateUnix = new Date(
+     Date.now() +  parseInt(invoice.value.paymentTerms) * 24 * 60 * 60 * 1000
+    )
+
+    invoice.value.paymentDueDate = new Date(
+      invoice.value.paymentDueDateUnix
+    ).toLocaleString('pt-BR', dateOptions as any)
+  }
+)
+
+function checkClick(e: Event) {
+  if (e.target === document.querySelector('.invoice-wrapper')) {
+    modalStore.toggleModal()
+  }
 }
 
 function submitForm() {
