@@ -2,6 +2,8 @@
 import { onMounted, ref, watch } from 'vue'
 import { useModalStore } from '../stores/modal'
 import { Invoice } from '../types'
+import { uid } from 'uid'
+
 const invoice = ref<Invoice>({
   billerStreetAddress: '',
   billerCity: '',
@@ -45,7 +47,7 @@ watch(
   },
   () => {
     invoice.value.paymentDueDateUnix = new Date(
-     Date.now() +  parseInt(invoice.value.paymentTerms) * 24 * 60 * 60 * 1000
+      Date.now() + parseInt(invoice.value.paymentTerms) * 24 * 60 * 60 * 1000
     )
 
     invoice.value.paymentDueDate = new Date(
@@ -64,12 +66,20 @@ function submitForm() {
   console.log('wah')
 }
 
-function deleteInvoiceItem(id: number) {
-  console.log(id)
+function deleteInvoiceItem(id: string) {
+  invoice.value.invoiceItemList = invoice.value.invoiceItemList.filter(
+    (item) => item.id !== id
+  )
 }
 
 function addNewInvoiceItem() {
-  console.log('wah')
+  invoice.value.invoiceItemList.push({
+    id: uid(),
+    name: '',
+    qty: 0,
+    price: 0,
+    total: 0,
+  })
 }
 
 function saveDraft() {
@@ -266,23 +276,24 @@ function publishInvoice() {
               <td class="item-total">
                 ${{ (item.total = item.qty * item.price) }}
               </td>
-
-              <div class="delete" @click="deleteInvoiceItem(item.id)">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </div>
+              <td class="item-delete">
+                <div class="delete" @click="deleteInvoiceItem(item.id)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                </div>
+              </td>
             </tr>
           </table>
 
@@ -395,6 +406,44 @@ table {
   margin-bottom: var(--small-size-fluid);
 }
 
+.table-heading,
+.table-items {
+  font-size: 0.75rem;
+
+  display: flex;
+  gap: 1rem;
+}
+
+.item-name {
+  flex-basis: 50%;
+}
+.item-qty {
+  flex-basis: 10%;
+}
+.item-price {
+  flex-basis: 20%;
+}
+.item-total {
+  flex-basis: 20%;
+  align-self: center;
+}
+
+.item-delete {
+  align-self: center;
+}
+
+.table-items{
+  margin-block: var(--extra-small-size-fluid);
+}
+
+.table-items .item-total {
+  text-align: right;
+}
+
+.table-items input{
+  padding-block: var(--extra-small-size-fluid);
+}
+
 .button {
   display: flex;
   justify-content: center;
@@ -412,7 +461,8 @@ table {
   font-weight: 600;
 }
 
-.button svg {
+.button svg,
+.delete svg {
   height: 20px;
   width: 20px;
 }
