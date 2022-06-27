@@ -6,6 +6,7 @@ import { uid } from 'uid'
 import app from '../firebase/firebaseInit'
 import { getFirestore } from 'firebase/firestore'
 import { addDoc, collection } from 'firebase/firestore'
+import Loading from './LoadingComponent.vue'
 
 const invoice = ref<Invoice>({
   invoiceId: '',
@@ -30,7 +31,10 @@ const invoice = ref<Invoice>({
   invoiceItemList: [],
   invoiceTotal: 0,
   invoicePaid: false,
+  docId: '',
 })
+
+const loading = ref(false)
 
 const modalStore = useModalStore()
 
@@ -66,7 +70,7 @@ watch(
 
 function checkClick(e: Event) {
   if (e.target === document.querySelector('.invoice-wrapper')) {
-    modalStore.toggleModal()
+    modalStore.toggleAlertModal()
   }
 }
 
@@ -108,6 +112,8 @@ async function uploadInvoice() {
     return
   }
 
+  loading.value = true
+
   calcInvoiceTotal()
 
   const db = getFirestore(app)
@@ -137,7 +143,9 @@ async function uploadInvoice() {
     invoicePaid: false,
   })
 
-  modalStore.toggleModal()
+  loading.value = false
+
+  modalStore.toggleInvoiceModal()
 }
 
 function submitForm() {
@@ -146,8 +154,9 @@ function submitForm() {
 </script>
 
 <template>
-  <div ref="invoiceWrap" class="invoice-wrapper" @click="checkClick">
+  <div class="invoice-wrapper" @click="checkClick">
     <form class="invoice-content" @submit.prevent="submitForm">
+      <Loading v-show="loading" />
       <h1>New Invoice</h1>
 
       <div class="bill-from">
@@ -379,7 +388,7 @@ function submitForm() {
           <button
             class="button btn-cancel"
             type="button"
-            @click="modalStore.toggleModal"
+            @click="modalStore.toggleInvoiceModal"
           >
             Cancel
           </button>
@@ -512,23 +521,6 @@ table {
   padding-block: var(--extra-small-size-fluid);
 }
 
-.button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-
-  border: none;
-  border-radius: 100vw;
-
-  box-shadow: var(--box-shadow);
-
-  padding: var(--extra-small-size-fluid) var(--small-size-fluid);
-
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
 .button svg,
 .delete svg {
   height: 20px;
@@ -541,13 +533,6 @@ table {
   color: var(--white);
 
   width: 100%;
-}
-
-.buttons {
-  display: flex;
-  justify-content: space-between;
-
-  margin-block: var(--small-size-fluid);
 }
 
 .buttons-save {
