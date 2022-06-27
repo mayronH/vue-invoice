@@ -9,11 +9,11 @@ export interface Invoice {
   clientCity: string
   clientZipCode: string
   clientCountry: string
-  invoiceDateUnix: string
-  invoiceDate: Date
+  invoiceDateUnix: Date
+  invoiceDate: string
   paymentTerms: string
-  paymentDueDateUnix: string
-  paymentDueDate: Date
+  paymentDueDateUnix: Date
+  paymentDueDate: string
   productDescription: string
   invoicePending: string
   invoiceDraft: boolean
