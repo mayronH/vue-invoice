@@ -8,6 +8,13 @@ const routes = [
             import(/* webpackChunkName: "home" */ '../views/HomeView.vue'),
     },
 
+    {
+        path: '/invoice/:invoiceId',
+        name: 'Invoice',
+        component: () =>
+            import(/* webpackChunkName: "invoice" */ '../views/InvoiceView.vue'),
+    },
+
     // 404 Page
     {
         path: '/:catchAll(.*)*', // regex, catch any route that doesn't exists

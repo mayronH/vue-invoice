@@ -6,7 +6,7 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore'
 export const useInvoiceStore = defineStore('invoice', {
   state: () => ({
     invoiceData: [] as Array<Invoice>,
-    invoicesLoaded: false
+    invoicesLoaded: false,
   }),
   getters: {
     getInvoices: async (state) => {
@@ -15,7 +15,9 @@ export const useInvoiceStore = defineStore('invoice', {
       const docSnap = await getDocs(collection(db, 'invoices'))
 
       docSnap.forEach((doc) => {
-        if (state.invoiceData.some((invoice) => invoice.invoiceId === doc.id)) {
+        if (
+          !state.invoiceData.some((invoice) => invoice.invoiceId === doc.id)
+        ) {
           const data = {
             docId: doc.id,
             invoiceId: doc.data().invoiceId,
@@ -45,7 +47,7 @@ export const useInvoiceStore = defineStore('invoice', {
           state.invoiceData.push(data)
         }
       })
-      
+
       state.invoicesLoaded = true
     },
   },
