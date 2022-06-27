@@ -22,6 +22,7 @@ export interface Invoice {
 }
 
 export interface InvoiceItem {
+  id: number
   name: string
   qty: number
   price: number

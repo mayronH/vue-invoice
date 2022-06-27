@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useModalStore } from '../stores/modal';
+
+const modalStore = useModalStore()
+</script>
 <template>
   <main class="content">
     <header>
@@ -7,16 +11,19 @@
         <p>There are X total invoices</p>
       </div>
       <div class="actions">
-        <div class="select">
+        <div class="filter">
           <label for="filter">Filter By Status</label>
-          <select id="filter" name="">
-            <option value="draft">Draft</option>
-            <option value="pending">Pending</option>
-            <option value="paid">Paid</option>
-            <option value="clear">Clear Filter</option>
-          </select>
+          <div class="select">
+            <select id="filter" name="">
+              <option value="null">Filter By Status</option>
+              <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+              <option value="clear">Clear Filter</option>
+            </select>
+          </div>
         </div>
-        <button class="new-invoice" type="button">
+        <button class="new-invoice" type="button" @click="modalStore.toggleModal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"
@@ -33,6 +40,7 @@
         </button>
       </div>
     </header>
+
   </main>
 </template>
 
@@ -53,9 +61,17 @@ header {
   align-items: center;
   gap: var(--extra-small-size-fluid);
 }
-.select {
+.filter {
   display: flex;
   flex-direction: column;
+}
+
+.filter label{
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+
+  transform: translate3d(-999px, -999px, 0);
 }
 .new-invoice {
   background-color: var(--accent3);
