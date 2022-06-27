@@ -2,11 +2,15 @@
 import { onBeforeMount, ref } from 'vue'
 import NavigationComponent from './components/NavigationComponent.vue'
 import InvoiceModal from './components/InvoiceModal.vue'
+import AlertModal from './components/AlertModal.vue'
 import { useModalStore } from './stores/modal'
+import { useInvoiceStore } from './stores/invoice'
+import Loading from './components/LoadingComponent.vue'
 
 const mobile = ref<boolean>(false)
 
 const modalStore = useModalStore()
+const invoiceStore = useInvoiceStore()
 
 function checkScreenSize() {
   const windowWidth = window.innerWidth
@@ -20,14 +24,21 @@ function checkScreenSize() {
 onBeforeMount(() => {
   checkScreenSize()
   window.addEventListener('resize', checkScreenSize)
+
+  invoiceStore.getInvoices
 })
+
 </script>
 
 <template>
   <div v-if="!mobile" class="app">
     <NavigationComponent />
 
-    <div class="app-content">
+    <Loading v-show="!invoiceStore.invoicesLoaded" />
+
+    <div v-if="invoiceStore.invoicesLoaded" class="app-content">
+      <AlertModal v-if="modalStore.alertModal" />
+
       <transition name="invoice">
         <InvoiceModal v-if="modalStore.invoiceModal" />
       </transition>
@@ -80,7 +91,32 @@ main.content {
   transition: 0.8s ease all;
 }
 
-.invoice-enter-from, .invoice-leave-to {
+.invoice-enter-from,
+.invoice-leave-to {
   transform: translate3d(-700px, 0, 0);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+
+  margin-block: var(--small-size-fluid);
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  border: none;
+  border-radius: 100vw;
+
+  box-shadow: var(--box-shadow);
+
+  padding: var(--extra-small-size-fluid) var(--small-size-fluid);
+
+  font-size: 1.125rem;
+  font-weight: 600;
 }
 </style>

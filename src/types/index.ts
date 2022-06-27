@@ -21,6 +21,7 @@ export interface Invoice {
   invoiceItemList: Array<InvoiceItem>
   invoiceTotal: number
   invoicePaid: boolean
+  docId: string
 }
 
 export interface InvoiceItem {

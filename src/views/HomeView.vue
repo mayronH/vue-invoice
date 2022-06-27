@@ -23,7 +23,7 @@ const modalStore = useModalStore()
             </select>
           </div>
         </div>
-        <button class="new-invoice" type="button" @click="modalStore.toggleModal">
+        <button class="new-invoice" type="button" @click="modalStore.toggleInvoiceModal">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-5 w-5"

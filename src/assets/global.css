@@ -123,6 +123,8 @@ select::-ms-expand {
 
   background-color: var(--grey);
 
+  -webkit-clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+
   clip-path: polygon(100% 0%, 0 0%, 50% 100%);
 
   justify-self: end;
@@ -148,7 +150,9 @@ select:focus-within {
   *,
   *::before,
   *::after {
+    -webkit-animation-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    -webkit-animation-iteration-count: 1 !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
