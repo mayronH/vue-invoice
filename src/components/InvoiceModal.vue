@@ -3,8 +3,12 @@ import { onMounted, ref, watch } from 'vue'
 import { useModalStore } from '../stores/modal'
 import { Invoice } from '../types'
 import { uid } from 'uid'
+import app from '../firebase/firebaseInit'
+import { getFirestore } from 'firebase/firestore'
+import { addDoc, collection } from 'firebase/firestore'
 
 const invoice = ref<Invoice>({
+  invoiceId: '',
   billerStreetAddress: '',
   billerCity: '',
   billerZipCode: '',
@@ -21,10 +25,11 @@ const invoice = ref<Invoice>({
   paymentDueDateUnix: new Date(),
   paymentDueDate: '',
   productDescription: '',
-  invoicePending: '',
+  invoicePending: false,
   invoiceDraft: false,
   invoiceItemList: [],
   invoiceTotal: 0,
+  invoicePaid: false,
 })
 
 const modalStore = useModalStore()
@@ -65,10 +70,6 @@ function checkClick(e: Event) {
   }
 }
 
-function submitForm() {
-  console.log('wah')
-}
-
 function deleteInvoiceItem(id: string) {
   invoice.value.invoiceItemList = invoice.value.invoiceItemList.filter(
     (item) => item.id !== id
@@ -86,11 +87,61 @@ function addNewInvoiceItem() {
 }
 
 function saveDraft() {
-  console.log('wah')
+  invoice.value.invoiceDraft = true
 }
 
 function publishInvoice() {
-  console.log('wah')
+  invoice.value.invoicePending = true
+}
+
+function calcInvoiceTotal() {
+  invoice.value.invoiceTotal = 0
+
+  invoice.value.invoiceItemList.forEach((item) => {
+    invoice.value.invoiceTotal += item.total
+  })
+}
+
+async function uploadInvoice() {
+  if (invoice.value.invoiceItemList.length <= 0) {
+    alert('Please ensure you filled out the items')
+    return
+  }
+
+  calcInvoiceTotal()
+
+  const db = getFirestore(app)
+
+  await addDoc(collection(db, 'invoices'), {
+    invoiceId: uid(6),
+    billerStreetAddress: invoice.value.billerStreetAddress,
+    billerCity: invoice.value.billerCity,
+    billerZipCode: invoice.value.billerZipCode,
+    billerCountry: invoice.value.billerCountry,
+    clientName: invoice.value.clientName,
+    clientEmail: invoice.value.clientEmail,
+    clientStreetAddress: invoice.value.clientStreetAddress,
+    clientCity: invoice.value.clientCity,
+    clientZipCode: invoice.value.clientZipCode,
+    clientCountry: invoice.value.clientCountry,
+    invoiceDateUnix: invoice.value.invoiceDateUnix,
+    invoiceDate: invoice.value.invoiceDate,
+    paymentTerms: invoice.value.paymentTerms,
+    paymentDueDateUnix: invoice.value.paymentDueDateUnix,
+    paymentDueDate: invoice.value.paymentDueDate,
+    productDescription: invoice.value.productDescription,
+    invoicePending: invoice.value.invoicePending,
+    invoiceDraft: invoice.value.invoiceDraft,
+    invoiceItemList: invoice.value.invoiceItemList,
+    invoiceTotal: invoice.value.invoiceTotal,
+    invoicePaid: false,
+  })
+
+  modalStore.toggleModal()
+}
+
+function submitForm() {
+  uploadInvoice()
 }
 </script>
 
@@ -356,10 +407,24 @@ function publishInvoice() {
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 99;
 
   background-color: transparent;
 
   width: 100%;
+}
+
+.invoice-content {
+  position: relative;
+
+  padding: var(--small-size-fluid) var(--medium-size-fluid);
+
+  background-color: var(--bg-dark);
+
+  max-width: 700px;
+  width: 100%;
+
+  box-shadow: var(--box-shadow);
 }
 
 h2 {
@@ -506,20 +571,5 @@ table {
   background-color: var(--accent3);
 
   color: var(--white);
-}
-
-@media (min-width: 900px) {
-  .invoice-content {
-    position: relative;
-
-    padding: var(--small-size-fluid) var(--medium-size-fluid);
-
-    background-color: var(--bg-dark);
-
-    max-width: 700px;
-    width: 100%;
-
-    box-shadow: var(--box-shadow);
-  }
 }
 </style>

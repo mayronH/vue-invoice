@@ -1,4 +1,5 @@
 export interface Invoice {
+  invoiceId: string
   billerStreetAddress: string
   billerCity: string
   billerZipCode: string
@@ -15,10 +16,11 @@ export interface Invoice {
   paymentDueDateUnix: Date
   paymentDueDate: string
   productDescription: string
-  invoicePending: string
+  invoicePending: boolean
   invoiceDraft: boolean
   invoiceItemList: Array<InvoiceItem>
   invoiceTotal: number
+  invoicePaid: boolean
 }
 
 export interface InvoiceItem {
