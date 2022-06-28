@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import NavigationComponent from './components/NavigationComponent.vue'
 import InvoiceModal from './components/InvoiceModal.vue'
 import AlertModal from './components/AlertModal.vue'
@@ -60,11 +60,9 @@ onBeforeMount(() => {
 
   height: 100vh;
 }
-
 .app-content {
   position: relative;
 }
-
 .message-mobile {
   display: flex;
   flex-direction: column;
@@ -76,7 +74,6 @@ onBeforeMount(() => {
 
   height: 100vh;
 }
-
 main.content {
   display: grid;
   place-items: center;
@@ -84,17 +81,14 @@ main.content {
   margin-block: var(--small-size-fluid);
   padding-inline: var(--medium-size-fluid);
 }
-
 .invoice-enter-active,
 .invoice-leave-active {
   transition: 0.8s ease all;
 }
-
 .invoice-enter-from,
 .invoice-leave-to {
   transform: translate3d(-700px, 0, 0);
 }
-
 .buttons {
   display: flex;
   justify-content: space-between;
@@ -102,7 +96,6 @@ main.content {
 
   margin-block: var(--small-size-fluid);
 }
-
 .button {
   display: flex;
   justify-content: center;
@@ -119,7 +112,6 @@ main.content {
   font-size: 1.125rem;
   font-weight: 600;
 }
-
 .status-badge {
   display: flex;
   align-items: center;
@@ -129,7 +121,6 @@ main.content {
 
   border-radius: var(--border-radius);
 }
-
 .status-badge span {
   display: flex;
   align-items: center;
@@ -138,32 +129,26 @@ main.content {
 
   font-weight: 600;
 }
-
 .status-badge span::before {
   content: '';
 
   border: 10px solid var(--white);
   border-radius: 100vw;
 }
-
 .paid {
   background-color: var(--accent);
 
   color: var(--bg-dark);
 }
-
 .paid span::before {
   border-color: var(--bg-dark);
 }
-
 .draft {
   background-color: var(--accent4);
 }
-
 .pending {
   background-color: var(--accent3);
 }
-
 @media screen and (max-width: 545px) {
   .button {
     font-size: 0.8rem;
