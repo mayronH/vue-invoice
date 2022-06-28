@@ -246,6 +246,24 @@ function updateStatusToPending(invoiceId: string) {
 
   flex-basis: 60%;
 }
+.btn-delete {
+  background-color: var(--accent2);
+
+  color: var(--white);
+}
+.btn-paid {
+  background-color: var(--accent);
+}
+.btn-pending {
+  background-color: var(--accent3);
+
+  color: var(--white);
+}
+.btn-edit {
+  background-color: var(--bg-lighter);
+
+  color: var(--white);
+}
 .invoice-details {
   display: flex;
   align-items: center;
@@ -333,12 +351,10 @@ function updateStatusToPending(invoiceId: string) {
 
   border-bottom: 1px solid var(--bg-dark);
 }
-
 .heading p:first-child,
 .item p:first-child {
   flex-basis: 60%;
 }
-
 .total {
   display: flex;
   align-items: center;
