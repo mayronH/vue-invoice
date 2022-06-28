@@ -215,7 +215,7 @@ function updateStatusToPending(invoiceId: string) {
   height: 20px;
   width: 20px;
 }
-.content .header {
+.content header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -258,6 +258,99 @@ function updateStatusToPending(invoiceId: string) {
 
   background-color: var(--bg-medium);
 
+  padding: var(--medium-size-fluid);
+}
+.invoice-details .header,
+.payment-info,
+.invoice-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+}
+.product-description p:first-child {
+  font-size: var(--medium-size-fluid);
+}
+.product-description p:first-child span {
+  color: var(--grey);
+}
+.biller-details {
+  text-align: right;
+  line-height: 1.5rem;
+}
+.payment-info {
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--extra-large-size-fluid);
+
+  padding-block: var(--large-size-fluid);
+}
+.payment-info h4 {
+  font-weight: 300;
+  margin-bottom: var(--extra-small-size-fluid);
+}
+.payment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  align-self: stretch;
+}
+.payment h4:first-child {
+  margin-bottom: 0;
+}
+.payment p,
+.bill p:first-of-type,
+.sent-to p {
+  font-size: 1.25rem;
+  font-weight: 600;
+
+  margin-bottom: var(--extra-small-size-fluid);
+}
+.payment p:last-child {
+  margin-bottom: 0;
+}
+.invoice-items {
+  flex-direction: column;
+
+  background-color: var(--bg-lighter);
+
+  border-radius: var(--border-radius);
+
+  padding-top: var(--small-size-fluid);
+}
+.billing-items {
+  width: 100%;
+}
+.heading,
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   padding: var(--small-size-fluid) var(--medium-size-fluid);
+
+  border-bottom: 1px solid var(--bg-dark);
+}
+
+.heading p:first-child,
+.item p:first-child {
+  flex-basis: 60%;
+}
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  padding: var(--medium-size-fluid);
+
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+
+  background-color: var(--bg-dark);
 }
 </style>
