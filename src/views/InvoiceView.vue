@@ -252,7 +252,7 @@ async function updateStatusToPending(docId: string) {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 1rem;
+  gap: var(--extra-small-size-fluid);
 
   flex-basis: 60%;
 }
@@ -378,5 +378,11 @@ async function updateStatusToPending(docId: string) {
   border-bottom-right-radius: var(--border-radius);
 
   background-color: var(--bg-dark);
+}
+@media screen and (max-width: 545px) {
+  .payment-info {
+    flex-direction: column;
+    gap: var(--medium-size-fluid);
+  }
 }
 </style>

@@ -450,4 +450,20 @@ p {
 
   margin-top: 1rem;
 }
+
+@media screen and (max-width: 545px) {
+  header {
+    flex-direction: column;
+  }
+
+  header p {
+    margin: 0;
+  }
+
+  .actions {
+    justify-content: space-between;
+
+    margin-block: var(--medium-size-fluid);
+  }
+}
 </style>

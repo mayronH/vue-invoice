@@ -81,4 +81,31 @@ const props = defineProps({
   font-size: 1.125rem;
   font-weight: 600;
 }
+@media screen and (max-width: 545px) {
+  .invoice {
+    font-size: 0.75rem;
+  }
+  .price {
+    font-size: 0.8rem;
+  }
+}
+@media screen and (max-width: 425px) {
+  .invoice-content {
+    flex-direction: column;
+  }
+  .invoice-details,
+  .invoice-status {
+    justify-content: space-evenly;
+
+    width: 100%;
+  }
+
+  .invoice-status {
+    margin-top: var(--small-size-fluid);
+  }
+
+  .price {
+    font-size: 1.125rem;
+  }
+}
 </style>

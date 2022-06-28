@@ -98,6 +98,7 @@ main.content {
 .buttons {
   display: flex;
   justify-content: space-between;
+  gap: var(--small-size-fluid);
 
   margin-block: var(--small-size-fluid);
 }
@@ -161,5 +162,11 @@ main.content {
 
 .pending {
   background-color: var(--accent3);
+}
+
+@media screen and (max-width: 545px) {
+  .button {
+    font-size: 0.8rem;
+  }
 }
 </style>
