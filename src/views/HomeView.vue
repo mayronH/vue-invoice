@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useInvoiceStore } from '../stores/invoice'
 import { useModalStore } from '../stores/modal'
 import InvoiceComponent from '../components/InvoiceComponent.vue'
@@ -8,21 +8,43 @@ const modalStore = useModalStore()
 
 const invoiceStore = useInvoiceStore()
 
-const invoices = computed(() => invoiceStore.invoiceData)
+const filteredInvoices = computed(() => {
+  return filterInvoices()
+})
+
+function filterInvoices() {
+  if (filter.value) {
+    return invoiceStore.invoiceData.filter((invoice) => {
+      switch (filter.value) {
+        case 'draft':
+          return invoice.invoiceDraft === true
+        case 'pending':
+          return invoice.invoicePending === true
+        case 'paid':
+          return invoice.invoicePaid === true
+        default:
+          return invoice
+      }
+    })
+  }
+  return invoiceStore.invoiceData
+}
+
+const filter = ref('')
 </script>
 <template>
   <main class="content">
     <header>
       <div class="description">
         <h2>Invoices</h2>
-        <p>There are {{ invoices.length }} total invoices</p>
+        <p>There are {{ filteredInvoices.length }} total invoices</p>
       </div>
       <div class="actions">
         <div class="filter">
           <label for="filter">Filter By Status</label>
           <div class="select">
-            <select id="filter" name="">
-              <option value="null">Filter By Status</option>
+            <select id="filter" v-model="filter">
+              <option value="">Filter By Status</option>
               <option value="draft">Draft</option>
               <option value="pending">Pending</option>
               <option value="paid">Paid</option>
@@ -52,9 +74,9 @@ const invoices = computed(() => invoiceStore.invoiceData)
       </div>
     </header>
 
-    <div v-if="invoices.length > 0" class="invoice-wrapper">
+    <div v-if="filteredInvoices.length > 0" class="invoice-wrapper">
       <InvoiceComponent
-        v-for="invoice in invoices"
+        v-for="invoice in filteredInvoices"
         :key="invoice.invoiceId"
         :invoice="invoice"
       />
