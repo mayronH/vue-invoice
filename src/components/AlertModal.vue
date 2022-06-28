@@ -52,7 +52,6 @@ function closeInvoiceModal() {
 
   transition: all 0.4s;
 }
-
 .modal-content {
   position: relative;
 
@@ -69,26 +68,21 @@ function closeInvoiceModal() {
 
   border-radius: var(--border-radius);
 }
-
 p {
   text-align: center;
 }
-
 .buttons {
   justify-content: center;
   gap: var(--extra-small-size-fluid);
 }
-
 .buttons .button {
   flex: 1;
 }
-
 .btn-close {
   background-color: var(--accent2);
 
   color: var(--white);
 }
-
 .btn-return {
   background-color: var(--accent3);
 

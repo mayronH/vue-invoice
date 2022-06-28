@@ -422,7 +422,6 @@ function submitForm() {
 
   width: 100%;
 }
-
 .invoice-content {
   position: relative;
 
@@ -435,12 +434,10 @@ function submitForm() {
 
   box-shadow: var(--box-shadow);
 }
-
 h2 {
   margin-top: var(--extra-small-size-fluid);
   margin-bottom: var(--small-size-fluid);
 }
-
 h3 {
   margin-block: var(--extra-small-size-fluid);
 }
@@ -453,18 +450,15 @@ h3 {
 
   margin-bottom: var(--extra-small-size-fluid);
 }
-
 .inline-input,
 .payment {
   display: flex;
   flex-direction: row;
   gap: var(--extra-small-size-fluid);
 }
-
 label {
   color: var(--grey);
 }
-
 input {
   color: var(--white);
 
@@ -476,13 +470,11 @@ input {
 
   width: 100%;
 }
-
 table {
   width: 100%;
 
   margin-bottom: var(--small-size-fluid);
 }
-
 .table-heading,
 .table-items {
   font-size: 0.75rem;
@@ -490,7 +482,6 @@ table {
   display: flex;
   gap: 1rem;
 }
-
 .item-name {
   flex-basis: 50%;
 }
@@ -504,29 +495,23 @@ table {
   flex-basis: 20%;
   align-self: center;
 }
-
 .item-delete {
   align-self: center;
 }
-
 .table-items {
   margin-block: var(--extra-small-size-fluid);
 }
-
 .table-items .item-total {
   text-align: right;
 }
-
 .table-items input {
   padding-block: var(--extra-small-size-fluid);
 }
-
 .button svg,
 .delete svg {
   height: 20px;
   width: 20px;
 }
-
 .button-item {
   background-color: var(--bg-medium);
 
@@ -534,24 +519,20 @@ table {
 
   width: 100%;
 }
-
 .buttons-save {
   display: flex;
   gap: var(--small-size-fluid);
 }
-
 .btn-cancel {
   background-color: var(--accent2);
 
   color: var(--white);
 }
-
 .btn-draft {
   background-color: var(--accent4);
 
   color: var(--white);
 }
-
 .btn-submit {
   background-color: var(--accent3);
 

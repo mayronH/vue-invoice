@@ -47,7 +47,6 @@ const props = defineProps({
   text-decoration: none;
   color: inherit;
 }
-
 .invoice-content {
   border-radius: var(--border-radius);
 
@@ -59,7 +58,6 @@ const props = defineProps({
   justify-content: space-between;
   align-items: center;
 }
-
 .invoice-details,
 .invoice-status {
   flex: 1;
@@ -67,23 +65,18 @@ const props = defineProps({
   align-items: center;
   justify-content: space-around;
 }
-
 .invoice-details {
   flex-basis: 60%;
 }
-
 .invoice-status {
   flex-basis: 40%;
 }
-
 .tracking-number {
   color: var(--grey);
 }
-
 .person {
   text-transform: capitalize;
 }
-
 .price {
   font-size: 1.125rem;
   font-weight: 600;

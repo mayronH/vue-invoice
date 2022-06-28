@@ -73,11 +73,9 @@
 
   padding: var(--small-size-fluid) var(--medium-size-fluid);
 }
-
 .logo a {
   color: inherit;
 }
-
 .logo svg {
   width: 80px;
   height: 60px;

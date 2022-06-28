@@ -23,7 +23,6 @@
 
   cursor: not-allowed;
 }
-
 span {
   display: block;
 
@@ -38,13 +37,11 @@ span {
   -webkit-animation: spin ease 1s infinite;
   animation: spin ease 1s infinite;
 }
-
 @-webkit-keyframes spin {
   to {
     transform: rotateZ(360deg);
   }
 }
-
 @keyframes spin {
   to {
     transform: rotateZ(360deg);

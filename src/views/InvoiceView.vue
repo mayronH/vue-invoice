@@ -208,16 +208,13 @@ function updateStatusToPending(invoiceId: string) {
 
   justify-self: flex-start;
 }
-
 .nav-link:is(:hover, :focus) {
   color: var(--accent);
 }
-
 .nav-link svg {
   height: 20px;
   width: 20px;
 }
-
 .content .header {
   display: flex;
   align-items: center;
@@ -233,7 +230,6 @@ function updateStatusToPending(invoiceId: string) {
 
   padding: var(--small-size-fluid) var(--medium-size-fluid);
 }
-
 .status {
   display: flex;
   justify-content: flex-start;
@@ -242,7 +238,6 @@ function updateStatusToPending(invoiceId: string) {
 
   flex-basis: 40%;
 }
-
 .actions {
   display: flex;
   justify-content: flex-end;
@@ -251,7 +246,6 @@ function updateStatusToPending(invoiceId: string) {
 
   flex-basis: 60%;
 }
-
 .invoice-details {
   display: flex;
   align-items: center;

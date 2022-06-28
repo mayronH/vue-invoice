@@ -360,11 +360,9 @@ header {
 
   width: 100%;
 }
-
 .description h2 {
   font-size: var(--medium-size-fluid);
 }
-
 .actions {
   display: flex;
   align-items: center;
@@ -374,7 +372,6 @@ header {
   display: flex;
   flex-direction: column;
 }
-
 .filter label {
   opacity: 0;
   visibility: hidden;
@@ -399,12 +396,10 @@ header {
 
   padding: var(--extra-small-size-fluid) var(--small-size-fluid);
 }
-
 .new-invoice svg {
   width: 30px;
   height: 30px;
 }
-
 .invoice-wrapper {
   display: flex;
   flex-direction: column;
@@ -412,25 +407,21 @@ header {
 
   width: 100%;
 }
-
 .no-invoice {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
 }
-
 .no-invoice svg {
   height: 200px;
   width: 100%;
 }
-
 h3 {
   text-align: center;
 
   margin-top: var(--medium-size-fluid);
 }
-
 p {
   text-align: center;
   font-weight: 300;
