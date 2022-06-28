@@ -1,24 +1,28 @@
 import { defineStore } from 'pinia'
 import { Invoice } from '../types'
 import app from '../firebase/firebaseInit'
-import { getFirestore, collection, getDocs } from 'firebase/firestore'
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore'
 
 export const useInvoiceStore = defineStore('invoice', {
   state: () => ({
     invoiceData: [] as Array<Invoice>,
     invoicesLoaded: false,
     currentInvoiceArray: [] as Array<Invoice>,
+    editInvoice: false,
   }),
-  getters: {
-    getInvoices: async (state) => {
+  actions: {
+    async getInvoices() {
       const db = getFirestore(app)
 
       const docSnap = await getDocs(collection(db, 'invoices'))
-
       docSnap.forEach((doc) => {
-        if (
-          !state.invoiceData.some((invoice) => invoice.invoiceId === doc.id)
-        ) {
+        if (!this.invoiceData.some((invoice) => invoice.docId === doc.id)) {
           const data = {
             docId: doc.id,
             invoiceId: doc.data().invoiceId,
@@ -45,18 +49,39 @@ export const useInvoiceStore = defineStore('invoice', {
             invoicePaid: doc.data().invoicePaid,
           }
 
-          state.invoiceData.push(data)
+          this.invoiceData.push(data)
         }
       })
 
-      state.invoicesLoaded = true
+      this.invoicesLoaded = true
     },
-  },
-  actions: {
     getCurrentInvoice(id: string | string[]) {
       this.currentInvoiceArray = this.invoiceData.filter((invoice: Invoice) => {
         return invoice.invoiceId === id
       })
+    },
+    deleteInvoiceData(id: string) {
+      this.invoiceData = this.invoiceData.filter((invoice: Invoice) => {
+        return invoice.docId !== id
+      })
+    },
+    async updateInvoice(docId: string, invoiceId: string) {
+      this.deleteInvoiceData(docId)
+
+      await this.getInvoices()
+
+      this.toggleEdit()
+
+      this.getCurrentInvoice(invoiceId)
+    },
+    async deleteInvoice(docId: string) {
+      const db = getFirestore(app)
+      await deleteDoc(doc(db, 'invoices', docId))
+
+      this.deleteInvoiceData(docId)
+    },
+    toggleEdit() {
+      this.editInvoice = !this.editInvoice
     },
   },
 })

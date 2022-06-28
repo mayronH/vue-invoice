@@ -4,9 +4,10 @@ import { useModalStore } from '../stores/modal'
 import { Invoice } from '../types'
 import { uid } from 'uid'
 import app from '../firebase/firebaseInit'
-import { getFirestore } from 'firebase/firestore'
+import { doc, getFirestore, updateDoc } from 'firebase/firestore'
 import { addDoc, collection } from 'firebase/firestore'
 import Loading from './LoadingComponent.vue'
+import { useInvoiceStore } from '../stores/invoice'
 
 const invoice = ref<Invoice>({
   invoiceId: '',
@@ -37,15 +38,46 @@ const invoice = ref<Invoice>({
 const loading = ref(false)
 
 const modalStore = useModalStore()
+const invoiceStore = useInvoiceStore()
 
 onMounted(() => {
-  invoice.value.invoiceDate = new Date(
-    invoice.value.invoiceDateUnix
-  ).toLocaleString('pt-BR', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  if (!invoiceStore.editInvoice) {
+    invoice.value.invoiceDate = new Date(
+      invoice.value.invoiceDateUnix
+    ).toLocaleString('pt-BR', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  if (invoiceStore.editInvoice) {
+    const currentInvoice = invoiceStore.currentInvoiceArray[0]
+
+    invoice.value.invoiceId = currentInvoice.invoiceId
+    invoice.value.billerStreetAddress = currentInvoice.billerStreetAddress
+    invoice.value.billerCity = currentInvoice.billerCity
+    invoice.value.billerZipCode = currentInvoice.billerZipCode
+    invoice.value.billerCountry = currentInvoice.billerCountry
+    invoice.value.clientName = currentInvoice.clientName
+    invoice.value.clientEmail = currentInvoice.clientEmail
+    invoice.value.clientStreetAddress = currentInvoice.clientStreetAddress
+    invoice.value.clientCity = currentInvoice.clientCity
+    invoice.value.clientZipCode = currentInvoice.clientZipCode
+    invoice.value.clientCountry = currentInvoice.clientCountry
+    invoice.value.invoiceDateUnix = currentInvoice.invoiceDateUnix
+    invoice.value.invoiceDate = currentInvoice.invoiceDate
+    invoice.value.paymentTerms = currentInvoice.paymentTerms
+    invoice.value.paymentDueDateUnix = currentInvoice.paymentDueDateUnix
+    invoice.value.paymentDueDate = currentInvoice.paymentDueDate
+    invoice.value.productDescription = currentInvoice.productDescription
+    invoice.value.invoicePending = currentInvoice.invoicePending
+    invoice.value.invoiceDraft = currentInvoice.invoiceDraft
+    invoice.value.invoiceItemList = currentInvoice.invoiceItemList
+    invoice.value.invoiceTotal = currentInvoice.invoiceTotal
+    invoice.value.invoicePaid = currentInvoice.invoicePaid
+    invoice.value.docId = currentInvoice.docId
+  }
 })
 
 watch(
@@ -143,13 +175,65 @@ async function uploadInvoice() {
     invoicePaid: false,
   })
 
+  invoiceStore.getInvoices()
+
   loading.value = false
 
   modalStore.toggleInvoiceModal()
 }
 
+async function updateInvoice() {
+  if (invoice.value.invoiceItemList.length <= 0) {
+    alert('Please ensure you filled out the items')
+    return
+  }
+
+  loading.value = true
+
+  calcInvoiceTotal()
+
+  const db = getFirestore(app)
+
+  await updateDoc(doc(db, 'invoices', invoice.value.docId), {
+    billerStreetAddress: invoice.value.billerStreetAddress,
+    billerCity: invoice.value.billerCity,
+    billerZipCode: invoice.value.billerZipCode,
+    billerCountry: invoice.value.billerCountry,
+    clientName: invoice.value.clientName,
+    clientEmail: invoice.value.clientEmail,
+    clientStreetAddress: invoice.value.clientStreetAddress,
+    clientCity: invoice.value.clientCity,
+    clientZipCode: invoice.value.clientZipCode,
+    clientCountry: invoice.value.clientCountry,
+    invoiceDateUnix: invoice.value.invoiceDateUnix,
+    invoiceDate: invoice.value.invoiceDate,
+    paymentTerms: invoice.value.paymentTerms,
+    paymentDueDateUnix: invoice.value.paymentDueDateUnix,
+    paymentDueDate: invoice.value.paymentDueDate,
+    productDescription: invoice.value.productDescription,
+    invoiceItemList: invoice.value.invoiceItemList,
+    invoiceTotal: invoice.value.invoiceTotal,
+  })
+
+  loading.value = false
+
+  await invoiceStore.updateInvoice(invoice.value.docId, invoice.value.invoiceId)
+
+  modalStore.toggleInvoiceModal()
+}
+
 function submitForm() {
-  uploadInvoice()
+  if (!invoiceStore.editInvoice) {
+    uploadInvoice()
+    return
+  }
+
+  updateInvoice()
+}
+
+function closeModal() {
+  modalStore.toggleInvoiceModal()
+  if (invoiceStore.editInvoice) invoiceStore.toggleEdit()
 }
 </script>
 
@@ -157,7 +241,8 @@ function submitForm() {
   <div class="invoice-wrapper" @click="checkClick">
     <form class="invoice-content" @submit.prevent="submitForm">
       <Loading v-show="loading" />
-      <h1>New Invoice</h1>
+      <h1 v-if="!invoiceStore.editInvoice">New Invoice</h1>
+      <h1 v-else>Edit Invoice</h1>
 
       <div class="bill-from">
         <h2>Bill From</h2>
@@ -385,24 +470,34 @@ function submitForm() {
         </div>
 
         <div class="buttons">
-          <button
-            class="button btn-cancel"
-            type="button"
-            @click="modalStore.toggleInvoiceModal"
-          >
+          <button class="button btn-cancel" type="button" @click="closeModal">
             Cancel
           </button>
 
           <div class="buttons-save">
-            <button class="button btn-draft" type="submit" @click="saveDraft">
+            <button
+              v-if="!invoiceStore.editInvoice"
+              class="button btn-draft"
+              type="submit"
+              @click="saveDraft"
+            >
               Save Draft
             </button>
             <button
+              v-if="!invoiceStore.editInvoice"
               class="button btn-submit"
               type="submit"
               @click="publishInvoice"
             >
               Create Invoice
+            </button>
+            <button
+              v-else
+              class="button btn-submit"
+              type="submit"
+              @click="publishInvoice"
+            >
+              Update Invoice
             </button>
           </div>
         </div>

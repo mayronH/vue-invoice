@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useInvoiceStore } from '../stores/invoice'
 import { useModalStore } from '../stores/modal'
 
 const modalStore = useModalStore()
@@ -10,6 +11,9 @@ function closeAlertModal() {
 function closeInvoiceModal() {
   modalStore.toggleAlertModal()
   modalStore.toggleInvoiceModal()
+
+  const invoiceStore = useInvoiceStore()
+  if (invoiceStore.editInvoice) invoiceStore.toggleEdit()
 }
 </script>
 

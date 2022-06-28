@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import NavigationComponent from './components/NavigationComponent.vue'
 import InvoiceModal from './components/InvoiceModal.vue'
 import AlertModal from './components/AlertModal.vue'
@@ -25,7 +25,7 @@ onBeforeMount(() => {
   checkScreenSize()
   window.addEventListener('resize', checkScreenSize)
 
-  invoiceStore.getInvoices
+  invoiceStore.getInvoices()
 })
 </script>
 

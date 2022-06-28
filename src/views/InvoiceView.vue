@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { onBeforeMount, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useInvoiceStore } from '../stores/invoice'
+import { useModalStore } from '../stores/modal'
 import { Invoice } from '../types'
 
 const currentInvoice = ref<Invoice>({
@@ -31,7 +32,9 @@ const currentInvoice = ref<Invoice>({
 })
 
 const invoiceStore = useInvoiceStore()
+const modalStore = useModalStore()
 const route = useRoute()
+const router = useRouter()
 
 function getCurrentInvoice() {
   invoiceStore.getCurrentInvoice(route.params.invoiceId)
@@ -40,12 +43,23 @@ function getCurrentInvoice() {
 
 onBeforeMount(() => getCurrentInvoice())
 
-function toggleEditInvoice(invoiceId: string) {
-  console.log(invoiceId)
+function toggleEditInvoice() {
+  invoiceStore.toggleEdit()
+  modalStore.toggleInvoiceModal()
 }
 
-function deleteInvoice(invoiceId: string) {
-  console.log(invoiceId)
+watch(
+  () => invoiceStore.editInvoice,
+  () => {
+    if (!invoiceStore.editInvoice) {
+      currentInvoice.value = invoiceStore.currentInvoiceArray[0]
+    }
+  }
+)
+
+async function deleteInvoice(docId: string) {
+  await invoiceStore.deleteInvoice(docId)
+  router.push({ name: 'home' })
 }
 function updateStatusToPaid(invoiceId: string) {
   ;(currentInvoice.value.invoiceDraft = false),
@@ -100,14 +114,14 @@ function updateStatusToPending(invoiceId: string) {
         <button
           class="button btn-edit"
           type="button"
-          @click="toggleEditInvoice(currentInvoice.invoiceId)"
+          @click="toggleEditInvoice"
         >
           Edit
         </button>
         <button
           class="button btn-delete"
           type="button"
-          @click="deleteInvoice(currentInvoice.invoiceId)"
+          @click="deleteInvoice(currentInvoice.docId)"
         >
           Delete
         </button>
