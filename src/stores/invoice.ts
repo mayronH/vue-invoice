@@ -7,6 +7,7 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  updateDoc,
 } from 'firebase/firestore'
 
 export const useInvoiceStore = defineStore('invoice', {
@@ -79,6 +80,36 @@ export const useInvoiceStore = defineStore('invoice', {
       await deleteDoc(doc(db, 'invoices', docId))
 
       this.deleteInvoiceData(docId)
+    },
+    async updateStatusToPaid(docId: string) {
+      this.invoiceData.forEach((invoice) => {
+        if (invoice.docId === docId) {
+          invoice.invoicePaid = true
+          invoice.invoicePending = false
+        }
+      })
+
+      const db = getFirestore(app)
+      await updateDoc(doc(db, 'invoices', docId), {
+        invoicePaid: true,
+        invoicePending: false,
+      })
+    },
+    async updateStatusToPending(docId: string) {
+      this.invoiceData.forEach((invoice) => {
+        if (invoice.docId === docId) {
+          invoice.invoicePaid = false
+          invoice.invoiceDraft = false
+          invoice.invoicePending = true
+        }
+      })
+
+      const db = getFirestore(app)
+      await updateDoc(doc(db, 'invoices', docId), {
+        invoicePaid: false,
+        invoiceDraft: false,
+        invoicePending: true,
+      })
     },
     toggleEdit() {
       this.editInvoice = !this.editInvoice

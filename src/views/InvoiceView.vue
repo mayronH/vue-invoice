@@ -61,15 +61,11 @@ async function deleteInvoice(docId: string) {
   await invoiceStore.deleteInvoice(docId)
   router.push({ name: 'home' })
 }
-function updateStatusToPaid(invoiceId: string) {
-  ;(currentInvoice.value.invoiceDraft = false),
-    (currentInvoice.value.invoicePending = false),
-    (currentInvoice.value.invoicePaid = true)
+async function updateStatusToPaid(docId: string) {
+  await invoiceStore.updateStatusToPaid(docId)
 }
-function updateStatusToPending(invoiceId: string) {
-  ;(currentInvoice.value.invoiceDraft = false),
-    (currentInvoice.value.invoicePending = true),
-    (currentInvoice.value.invoicePaid = false)
+async function updateStatusToPending(docId: string) {
+  await invoiceStore.updateStatusToPending(docId)
 }
 </script>
 
@@ -129,7 +125,7 @@ function updateStatusToPending(invoiceId: string) {
           v-if="currentInvoice.invoicePending"
           class="button btn-paid"
           type="button"
-          @click="updateStatusToPaid(currentInvoice.invoiceId)"
+          @click="updateStatusToPaid(currentInvoice.docId)"
         >
           Mark as Paid
         </button>
@@ -137,7 +133,7 @@ function updateStatusToPending(invoiceId: string) {
           v-if="currentInvoice.invoiceDraft || currentInvoice.invoicePaid"
           class="button btn-pending"
           type="button"
-          @click="updateStatusToPending(currentInvoice.invoiceId)"
+          @click="updateStatusToPending(currentInvoice.docId)"
         >
           Mark as Pending
         </button>
